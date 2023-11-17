@@ -5,6 +5,8 @@
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
 // @match        https://ravel-beta.sonicexe66.repl.co/
+// @downloadURL  https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js?token=GHSAT0AAAAAACKMW56MSR5B3XGUQ6PQMPT4ZKX6VXA
+// @updateURL    https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js?token=GHSAT0AAAAAACKMW56MSR5B3XGUQ6PQMPT4ZKX6VXA
 // @run-at       document-end
 // @icon         https://www.google.com/s2/favicons?domain=evades.io
 // @grant        none
