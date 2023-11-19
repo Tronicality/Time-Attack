@@ -5,18 +5,26 @@
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
 // @match        https://ravel-beta.sonicexe66.repl.co/
-// @downloadURL  https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js?token=GHSAT0AAAAAACKMW56MSR5B3XGUQ6PQMPT4ZKX6VXA
-// @updateURL    https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js?token=GHSAT0AAAAAACKMW56MSR5B3XGUQ6PQMPT4ZKX6VXA
+// @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/config.js
+// @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/html.js
+// @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Client%20Helper.js
+// @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js
+// @downloadURL  https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js
+// @updateURL    https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Pack.js
 // @run-at       document-end
 // @icon         https://www.google.com/s2/favicons?domain=evades.io
 // @grant        none
 // ==/UserScript==
-const originalRenderArea = window.renderArea; //Soon to be used for different options
-window.renderArea = renderBr1hArea;
 
-//Toggle Options
-let toggleUI = true;
-let toggleMinimap = true;
+//TODO: mm120
+//TODO: combine everything
+//TODO: Cheat
+//TODO: data
+//TODO: server
+//TODO: rendering
+//TODO: community hero ranking filter(everything, solo, duo, map, top 10 players)
+//TODO: beg to either: Kaluub, sonicexe, ravel, DD1
+window.renderArea = renderBr1hArea;
 
 function handleKey(event) {
     if (event.key.toLowerCase() === "h") {
@@ -24,199 +32,250 @@ function handleKey(event) {
     } else if (event.key.toLowerCase() === "m") {
         toggleMinimap = !toggleMinimap;
     } else if (event.key.toLowerCase() === "p") {
-
         let readStart = convertDuration(startTime)
         let readEnd = convertDuration(endTime)
         let readElapsed = convertDuration(elapsedTime)
+        let mm120 = convertDuration(mm120Time)
 
+        timeContent.text(`Your time ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`);
+        if (!inMenu){ //This right here is so finicky, it only works with fadeTo for god knows why
+            if (timehidden) {
+                timeOverlay.fadeTo("fast", 1);  // Fade in
+                timehidden = false;
+            } else {
+                timeOverlay.fadeTo("fast", 0);  // Fade out
+                timehidden = true;
+            }
+        }
 
         console.log(`Start: ${readStart.minutes}:${readStart.seconds}:${readStart.milliseconds}`)
         console.log(`End: ${readEnd.minutes}:${readEnd.seconds}:${readEnd.milliseconds}`)
         console.log(`Elapsed: ${readElapsed.minutes}:${readElapsed.seconds}:${readElapsed.milliseconds}`)
+        console.log(`mm120: ${mm120.minutes}:${mm120.seconds}:${mm120.milliseconds}`)
+    } else if(event.key.toLowerCase() === "o"){
+        resetRun = true
     }
 }
 
-document.addEventListener("keydown", handleKey);
-
-//Timing
-let timerStart = false;
-let timerEnd = false;
-let typeErrorReceived = false;
-let startTime = 0;
-let endTime = 0;
-let elapsedTime = 0;
-
-function convertDuration(milliseconds) {
-    if (typeof milliseconds !== 'number') {
-        throw new Error('Input must be a number representing milliseconds.');
+function SetData(player, area){ //TODO: mm120 - update data
+    const playerData = {
+        name: player.name,
+        map: area
     }
 
-    // Ensure milliseconds is non-negative
-    milliseconds = Math.max(0, milliseconds);
-
-    // Calculate minutes
-    const minutes = Math.floor(milliseconds / (60 * 1000));
-
-    // Calculate remaining milliseconds
-    milliseconds %= (60 * 1000);
-
-    // Calculate seconds
-    const seconds = Math.floor(milliseconds / 1000);
-
-    // Calculate remaining milliseconds
-    const remainingMilliseconds = milliseconds % 1000;
+    let mapData = {}
+    if (area === "Monumental Migration 120"){
+        mapData = {
+            username: player.name,
+            rank: 1,
+            hero: player.className,
+            runs: {
+                deaths: player.deathCounter,
+                fps: (window.sandbox.checked) ? 60 : 30,
+                time: mm120Time,
+                noPoints: window.no_points.checked
+            }
+        }
+    }
+    else{
+        mapData = {
+            username: player.name,
+            rank: 1,
+            hero: player.className,
+            runs: {
+                deaths: player.deathCounter,
+                fps: (window.sandbox.checked) ? 60 : 30,
+                time: elapsedTime,
+                noPoints: window.no_points.checked
+            }
+        }
+    }
 
     return {
-        minutes: minutes,
-        seconds: seconds,
-        milliseconds: remainingMilliseconds
-    };
-}
-
-
-//Area boundaries cuz map placements are so shit
-let areaBoundaries = {
-    "Central Core": {
-        "x": 12,
-        "top": 2,
-        "bottom": 13
-    },
-    "Haunted Halls": {
-        "x": 12,
-        "top": 82,
-        "bottom": 93
-    },
-    "Peculiar Pyramid": {
-        "x": 12,
-        "top": 162,
-        "bottom": 173
-    },
-    "Wacky Wonderland": {
-        "x": 12,
-        "top": 527,
-        "bottom": 538
-    },
-    "Glacial Gorge": {
-        "x": 12,
-        "top": 572,
-        "bottom": 583
-    },
-    "Vicious Valley": {
-        "x": 12,
-        "top": 617,
-        "bottom": 628
-    },
-    "Humongous Hollow": {
-        "x": 12,
-        "top": 662,
-        "bottom": 673
-    },
-    "Elite Expanse": {
-        "x": 12,
-        "top": 707,
-        "bottom": 718
-    },
-    "Central Core Hard": {
-        "x": 12,
-        "top": 752,
-        "bottom": 763
-    },
-    "Dangerous District": {
-        "x": 12,
-        "top": 797,
-        "bottom": 808
-    },
-    "Quiet Quarry": {
-        "x": 12,
-        "top": 842,
-        "bottom": 853
-    },
-    "Monumental Migration": {
-        "x": 12,
-        "top": 887,
-        "bottom": 898
-    },
-    "Ominous Occult": {
-        "x": 12,
-        "top": 932,
-        "bottom": 938
-    },
-    "Vicious Valley Hard": {
-        "x": 12,
-        "top": 972,
-        "bottom": 983
-    },
-    "Frozen Fjord": {
-        "x": 12,
-        "top": 1017,
-        "bottom": 1030
-    },
-    "Restless Ridge": {
-        "x": -48,
-        "top": 1467,
-        "bottom": 1480
-    },
-    "Toxic Territory": {
-        "x": -48,
-        "top": 1365,
-        "bottom": 1369.9
-    },
-    "Magnetic Monopole": {
-        "x": -48,
-        "top": 1400,
-        "bottom": 1406
-    },
-    "Old Assorted Alcove": {
-        "x": -49,
-        "top": 1440,
-        "bottom": 1453
+        player: playerData,
+        map: mapData
     }
-};
+}
 
 //Re-written render Area
 function renderBr1hArea(area, players, focus, old) {
-    //Timing shit
+    inSafe = players[0].safeZone
+    //totalTimeStart = performance.now(); //TODO: data - recording time played
+    // Reset Run
+    if (resetRun){ //TODO: rendering - resetting does not render original area
+        resetRun = false;
+
+
+        timerStart = false;
+        timerEnd = false;
+        startTime = 0;
+        endTime = 0;
+        elapsedTime = 0;
+
+
+        totalDeaths += players[0].deathCounter;
+        players[0].deathCounter = 0;
+
+
+        mm120Reached = false;
+        skippedOnce = false;
+
+
+        //players[0].world = 0; //buggy
+        players[0].area = 0;
+
+        players[0].pos.x = worldBoundaries[area.name].x - 5
+
+        let areaY = (worldBoundaries[area.name].top + worldBoundaries[area.name].bottom)/2
+        players[0].pos.y = areaY
+
+
+        console.log("Run Reset")
+    }
+
+    //Timing
     let check = false
     let info = "";
-    try{ //Starting Timer
+    try{
         if (!timerStart){
-            if (!players[0].hasCheated){
-                if (players[0].area == 0){
-                    //Validate if player is in area
-                    if(players[0].pos.x < areaBoundaries[area.name].x){
-                        if (players[0].pos.y > areaBoundaries[area.name].top && players[0].pos.y < areaBoundaries[area.name].bottom){
-                            if (!players[0].safeZone){
-                                console.log(true)
-                                startTime = players[0].timer;
-                                timerStart = true
+            if (acceptedHeroes.includes(players[0].className)){
+                if (!players[0].hasCheated){
+                    if (players[0].area == 0){
+                        if(players[0].pos.x < worldBoundaries[area.name].x){ //Validate if player is in area
+                            if (players[0].pos.y > worldBoundaries[area.name].top && players[0].pos.y < worldBoundaries[area.name].bottom){
+                                if (!players[0].safeZone){
+                                    console.log(true)
+                                    startTime = players[0].timer;
+                                    timerStart = true
+                                }
+                                //console.log(players[0].vel)
+                                check = true
                             }
-                            //console.log(players[0].vel)
-                            check = true
+                            else{
+                                info = "Not in safe zone (Invalid Y value)"
+                            }
                         }
                         else{
-                            info = "Y value"
+                            info = "Not in safe zone (Invalid X value)"
                         }
                     }
                     else{
-                        info = "X value"
+                        info = "Not in First Area"
                     }
                 }
                 else{
-                    info = "Not in First Area"
+                    info = "Player has Cheated"
                 }
             }
             else{
-                info = "Player has Cheated"
+                info = "Not Accepted Hero"
             }
         }
         else if (!timerEnd){
             for (const zoneKey in area.zones) {
                 if (area.zones.hasOwnProperty(zoneKey)) {
                     const zone = area.zones[zoneKey];
+
                     if (zone.type === 4){
-                        endTime = players[0].timer;
-                        elapsedTime = endTime - startTime;
-                        timerEnd = true
+                        let skipVictory = false
+
+                        if (area.name != "Monumental Migration"){
+                            mm480Reached = true
+                        }
+                        else{
+                            if (area.pos.x === 47967 && area.pos.y === 885){
+                                mm480Reached = true
+                            }
+                            else{
+                                mm480Reached = false
+                            }
+                        }
+
+                        if (multipleAreaMaps.includes(area.name)){
+                            for (const map of multipleAreaMaps){
+                                if (skippedOnce && mm480Reached){
+                                    skipVictory = true;
+                                }
+                            }
+                        }
+                        else{
+                            skipVictory = true;
+                        }
+
+                        if (skipVictory){
+                            endTime = players[0].timer;
+                            elapsedTime = endTime - startTime;
+                            timerEnd = true
+
+                            if (true){ //TODO: Cheat - !players[0].hasCheated
+                                let mapName = area.name
+
+                                if (mapName === "Peculiar Pyramid"){
+                                    if(area.pos.x === 380 && area.pos.y === 384){
+                                        mapName = "Peculiar Pyramid Perimeter"
+                                    }
+                                    else{
+                                        mapName = "Peculiar Pyramid Inner"
+                                    }
+                                }
+                                else if (mapName === "Monumental Migration"){
+                                    if (area.pos.x === 11994 && area.pos.y === 885){
+                                        mapName = "Monumental Migration 120"
+                                    }
+                                    else{
+                                        mapName = "Monumental Migration 480"
+                                    }
+                                }
+                                else if (mapName === "Magnetic Monopole"){
+                                    if (area.pos.x === 731 && area.pos.y === 3352.5){
+                                        mapName = "Magnetic Monopole"
+                                    }
+                                    else{
+                                        mapName = "Magnetic Monopole Dipole"
+                                    }
+                                }
+
+                                let data = SetData(players[0], mapName)
+                                SendPlayerData(data.player, data.map)
+                                console.log("Data not sent")
+                            }
+                            else{
+                                console.log("Data not saved")
+                            }
+
+                            break
+                        }
+                        else{
+                            if (area.name == "Monumental Migration" && !mm120Reached){
+                                if (area.pos.x === 11994 && area.pos.y === 885){
+                                    mm120Reached = true;
+                                    mm120Time = players[0].timer - startTime //TODO: mm120 - update UI
+
+                                    let data = SetData(players[0], "Monumental Migration 120")
+                                    SendPlayerData(data.player, data.map)
+                                }
+                            }
+                            else if (area.name == "Wacky Wonderland"){
+                                if (area.pos.x === 7760 && area.pos.y === 525){
+                                    skippedOnce = true
+                                }
+                            }
+                            else if (area.name == "Humongous Hollow"){
+                                if (area.pos.x === 8000 && area.pos.y === 660){
+                                    skippedOnce = true
+                                }
+                            }
+                            else if (area.name == "Elite Expanse"){
+                                if (area.pos.x === 7997 && area.pos.y === 705){
+                                    skippedOnce = true
+                                }
+                            }
+                            else if (area.name == "Dangerous District"){
+                                if (area.pos.x === 8000 && area.pos.y === 795){
+                                    skippedOnce = true
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -225,6 +284,7 @@ function renderBr1hArea(area, players, focus, old) {
         if (!check && !timerStart){
             console.log(`${false} as ${info}`)
         }
+
     } catch (error) {
         if (error instanceof TypeError && !typeErrorReceived){
             console.error("Map not implemented for timer therefore TypeError");
@@ -235,7 +295,7 @@ function renderBr1hArea(area, players, focus, old) {
         }
     }
 
-    //Rendering Shit
+    //Rendering
     var ligth = document.createElement('canvas');
     var context1 = ligth.getContext("2d");
     ligth.width = width;
