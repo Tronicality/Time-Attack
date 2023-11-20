@@ -35,7 +35,7 @@ function updateLeaderboard(data) {
     if (leaderboardContainer.length === 0) {
         // If not, create the leaderboard
         var leaderboardHtml = '<div id="leaderboard">';
-        leaderboardHtml += '<ul style="position: absolute; list-style: none; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">';
+        leaderboardHtml += '<ul style="position: absolute; list-style: none; right: 0; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">';
 
         for (var i = 0; i < data.length; i++) {
             let readBestTime = convertDuration(data[i].bestTime);
@@ -62,12 +62,12 @@ function updateLeaderboard(data) {
         $('#leaderboard').css({
             'position': 'absolute',
             'top': $('#game').offset().top,
-            'right': $('#game').offset().right,
+            'right': 0,
             'z-index': '10000' // Adjust the z-index as needed
         });
     } else {
         // If the leaderboard already exists, update its content
-        var leaderboardHtml = '<ul style="position: absolute; list-style: none; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">'; // Adjusted opacity
+        var leaderboardHtml = '<ul style="position: absolute; list-style: none; right: 0; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">'; // Adjusted opacity
 
         for (var i = 0; i < data.length; i++) {
             let readBestTime = convertDuration(data[i].bestTime);
