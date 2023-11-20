@@ -1,7 +1,3 @@
-function isServerReachable() {
-    return true;
-}
-
 function GetTopPlayersForArea(areaName) {
   return fetch("https://evades-sandbox-server.glitch.me/topPlayers", {
     method: 'POST',

@@ -247,7 +247,7 @@ function renderBr1hArea(area, players, focus, old) {
                                 elapsedTime = endTime - startTime;
                                 timerEnd = true
 
-                                if (true){ //TODO: Cheat - !players[0].hasCheated
+                                if (!players[0].hasCheated){
                                     let mapName = area.name
 
                                     if (mapName === "Peculiar Pyramid"){
