@@ -28,8 +28,73 @@ timeOverlay.click(function(e) {
     }
 });
 
+function updateLeaderboard(data) {
+    var leaderboardContainer = $('#leaderboard');
+
+    // Check if the leaderboard already exists
+    if (leaderboardContainer.length === 0) {
+        // If not, create the leaderboard
+        var leaderboardHtml = '<div id="leaderboard">';
+        leaderboardHtml += '<ul style="position: absolute; list-style: none; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">';
+
+        for (var i = 0; i < data.length; i++) {
+            let readBestTime = convertDuration(data[i].bestTime);
+            const trimmedUsername = data[i].username.length > 15 ? data[i].username.substring(0, 12) + '...' : data[i].username;
+            const spaces = '&nbsp;'.repeat(Math.max(0, 17 - trimmedUsername.length));
+            let rankColor = 'white';
+            if (data[i].rank === 1) {
+                rankColor = 'gold';
+            } else if (data[i].rank === 2) {
+                rankColor = 'silver';
+            } else if (data[i].rank === 3) {
+                rankColor = '#cd7f32';
+            }
+
+            leaderboardHtml += `<li style="margin: 10px 0; padding: 0 10px; display: flex; justify-content: space-between; color: ${rankColor};">#${data[i].rank}. ${trimmedUsername}${spaces}<span>${readBestTime.minutes}:${readBestTime.seconds}.${readBestTime.milliseconds}</span></li>`;
+        }
+
+        leaderboardHtml += '</ul>';
+        leaderboardHtml += '</div>';
+
+        // Append the leaderboard to the body
+        $('body').append(leaderboardHtml);
+
+        $('#leaderboard').css({
+            'position': 'absolute',
+            'top': $('#game').offset().top,
+            'right': $('#game').offset().right,
+            'z-index': '10000' // Adjust the z-index as needed
+        });
+    } else {
+        // If the leaderboard already exists, update its content
+        var leaderboardHtml = '<ul style="position: absolute; list-style: none; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">'; // Adjusted opacity
+
+        for (var i = 0; i < data.length; i++) {
+            let readBestTime = convertDuration(data[i].bestTime);
+            const trimmedUsername = data[i].username.length > 15 ? data[i].username.substring(0, 12) + '...' : data[i].username;
+            const spaces = '&nbsp;'.repeat(Math.max(0, 17 - trimmedUsername.length));
+            let rankColor = 'white';
+            if (data[i].rank === 1) {
+                rankColor = 'gold';
+            } else if (data[i].rank === 2) {
+                rankColor = 'silver';
+            } else if (data[i].rank === 3) {
+                rankColor = '#cd7f32';
+            }
+
+            leaderboardHtml += `<li style="margin: 10px 0; padding: 0 10px; display: flex; justify-content: space-between; color: ${rankColor};">#${data[i].rank}. ${trimmedUsername}${spaces}<span>${readBestTime.minutes}:${readBestTime.seconds}.${readBestTime.milliseconds}</span></li>`;
+        }
+
+        leaderboardHtml += '</ul>';
+
+        // Update the content of the existing leaderboard
+        leaderboardContainer.html(leaderboardHtml);
+    }
+}
+
 $('body').append(timeOverlay);
 timeOverlay.append(timeContent);
+
 
 const styles = `
 #br1hPack {
@@ -57,6 +122,7 @@ const styles = `
      padding: 20px;
      border-radius: 5px;
 }
+
 `;
 
 const styleElement = document.createElement('style');

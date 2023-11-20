@@ -48,10 +48,10 @@ function handleKey(event) {
             }
         }
 
-        console.log(`Start: ${readStart.minutes}:${readStart.seconds}:${readStart.milliseconds}`)
-        console.log(`End: ${readEnd.minutes}:${readEnd.seconds}:${readEnd.milliseconds}`)
-        console.log(`Elapsed: ${readElapsed.minutes}:${readElapsed.seconds}:${readElapsed.milliseconds}`)
-        console.log(`mm120: ${mm120.minutes}:${mm120.seconds}:${mm120.milliseconds}`)
+        console.log(`Start: ${readStart.minutes}:${readStart.seconds}.${readStart.milliseconds}`)
+        console.log(`End: ${readEnd.minutes}:${readEnd.seconds}.${readEnd.milliseconds}`)
+        console.log(`Elapsed: ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`)
+        console.log(`mm120: ${mm120.minutes}:${mm120.seconds}.${mm120.milliseconds}`)
     } else if(event.key.toLowerCase() === "o"){
         resetRun = true
     }
@@ -67,9 +67,9 @@ function SetData(player, area){ //TODO: mm120 - update data
     if (area === "Monumental Migration 120"){
         mapData = {
             username: player.name,
-            rank: 1,
-            hero: player.className,
+            rank: 999,
             runs: {
+                hero: player.className,
                 deaths: player.deathCounter,
                 fps: (window.sandbox.checked) ? 60 : 30,
                 time: mm120Time,
@@ -81,8 +81,8 @@ function SetData(player, area){ //TODO: mm120 - update data
         mapData = {
             username: player.name,
             rank: 1,
-            hero: player.className,
             runs: {
+                hero: player.className,
                 deaths: player.deathCounter,
                 fps: (window.sandbox.checked) ? 60 : 30,
                 time: elapsedTime,
@@ -97,9 +97,25 @@ function SetData(player, area){ //TODO: mm120 - update data
     }
 }
 
+var previousArea;
+function inPreviousArea(current){
+    try{
+        if (previousArea != current){
+            previousArea = current
+            return false
+        }
+    } catch (error){
+        previousArea = current
+    }
+    return true
+}
+
+
+
 //Re-written render Area
 function renderBr1hArea(area, players, focus, old) {
     inSafe = players[0].safeZone
+
     //totalTimeStart = performance.now(); //TODO: data - recording time played
     // Reset Run
     if (resetRun){ //TODO: rendering - resetting does not render original area
@@ -133,167 +149,194 @@ function renderBr1hArea(area, players, focus, old) {
         console.log("Run Reset")
     }
 
-    //Timing
-    let check = false
-    let info = "";
-    try{
-        if (!timerStart){
-            if (acceptedHeroes.includes(players[0].className)){
-                if (!players[0].hasCheated){
-                    if (players[0].area == 0){
-                        if(players[0].pos.x < worldBoundaries[area.name].x){ //Validate if player is in area
-                            if (players[0].pos.y > worldBoundaries[area.name].top && players[0].pos.y < worldBoundaries[area.name].bottom){
-                                if (!players[0].safeZone){
-                                    console.log(true)
-                                    startTime = players[0].timer;
-                                    timerStart = true
+    if (!(area.name in worldBoundaries)){
+        $('#leaderboard').css('display', 'none');
+    }
+
+    if (area.name in worldBoundaries){
+         //Leaderboard Data
+        $('#leaderboard').css('display', 'block');
+        try {
+            if (!timerStart) {
+                if (!inPreviousArea(area.name) ) {
+                    
+                    GetTopPlayersForArea(area.name)
+                        .then(data => {
+                            updateLeaderboard(data);
+                        })
+                        .catch(error => {
+                            console.error("Leaderboard data error: ", error.message);
+                        });
+                }
+            }
+        } catch (error) {
+            console.error("Error in getting data: ", error.message);
+        }
+
+        //Timing
+        let check = false
+        let info = "";
+        try{
+            if (!timerStart){
+                if (acceptedHeroes.includes(players[0].className)){
+                    if (!players[0].hasCheated){
+                        if (players[0].area == 0){
+                            if(players[0].pos.x < worldBoundaries[area.name].x){ //Validate if player is in area
+                                if (players[0].pos.y > worldBoundaries[area.name].top && players[0].pos.y < worldBoundaries[area.name].bottom){
+                                    if (!players[0].safeZone){
+                                        console.log(true)
+                                        startTime = players[0].timer;
+                                        timerStart = true
+                                    }
+                                    //console.log(players[0].vel)
+                                    check = true
                                 }
-                                //console.log(players[0].vel)
-                                check = true
+                                else{
+                                    info = "Not in safe zone (Invalid Y value)"
+                                }
                             }
                             else{
-                                info = "Not in safe zone (Invalid Y value)"
+                                info = "Not in safe zone (Invalid X value)"
                             }
                         }
                         else{
-                            info = "Not in safe zone (Invalid X value)"
+                            info = "Not in First Area"
                         }
                     }
                     else{
-                        info = "Not in First Area"
+                        info = "Player has Cheated"
                     }
                 }
                 else{
-                    info = "Player has Cheated"
+                    info = "Not Accepted Hero"
                 }
             }
-            else{
-                info = "Not Accepted Hero"
-            }
-        }
-        else if (!timerEnd){
-            for (const zoneKey in area.zones) {
-                if (area.zones.hasOwnProperty(zoneKey)) {
-                    const zone = area.zones[zoneKey];
+            else if (!timerEnd){
+                for (const zoneKey in area.zones) {
+                    if (area.zones.hasOwnProperty(zoneKey)) {
+                        const zone = area.zones[zoneKey];
 
-                    if (zone.type === 4){
-                        let skipVictory = false
+                        if (zone.type === 4){
+                            let skipVictory = false
 
-                        if (area.name != "Monumental Migration"){
-                            mm480Reached = true
-                        }
-                        else{
-                            if (area.pos.x === 47967 && area.pos.y === 885){
+                            if (area.name != "Monumental Migration"){
                                 mm480Reached = true
                             }
                             else{
-                                mm480Reached = false
-                            }
-                        }
-
-                        if (multipleAreaMaps.includes(area.name)){
-                            for (const map of multipleAreaMaps){
-                                if (skippedOnce && mm480Reached){
-                                    skipVictory = true;
+                                if (area.pos.x === 47967 && area.pos.y === 885){
+                                    mm480Reached = true
+                                }
+                                else{
+                                    mm480Reached = false
                                 }
                             }
-                        }
-                        else{
-                            skipVictory = true;
-                        }
 
-                        if (skipVictory){
-                            endTime = players[0].timer;
-                            elapsedTime = endTime - startTime;
-                            timerEnd = true
-
-                            if (true){ //TODO: Cheat - !players[0].hasCheated
-                                let mapName = area.name
-
-                                if (mapName === "Peculiar Pyramid"){
-                                    if(area.pos.x === 380 && area.pos.y === 384){
-                                        mapName = "Peculiar Pyramid Perimeter"
-                                    }
-                                    else{
-                                        mapName = "Peculiar Pyramid Inner"
+                            if (multipleAreaMaps.includes(area.name)){
+                                for (const map of multipleAreaMaps){
+                                    if (skippedOnce && mm480Reached){
+                                        skipVictory = true;
                                     }
                                 }
-                                else if (mapName === "Monumental Migration"){
-                                    if (area.pos.x === 11994 && area.pos.y === 885){
-                                        mapName = "Monumental Migration 120"
-                                    }
-                                    else{
-                                        mapName = "Monumental Migration 480"
-                                    }
-                                }
-                                else if (mapName === "Magnetic Monopole"){
-                                    if (area.pos.x === 731 && area.pos.y === 3352.5){
-                                        mapName = "Magnetic Monopole"
-                                    }
-                                    else{
-                                        mapName = "Magnetic Monopole Dipole"
-                                    }
-                                }
-
-                                let data = SetData(players[0], mapName)
-                                SendPlayerData(data.player, data.map)
-                                console.log("Data not sent")
                             }
                             else{
-                                console.log("Data not saved")
+                                skipVictory = true;
                             }
 
-                            break
-                        }
-                        else{
-                            if (area.name == "Monumental Migration" && !mm120Reached){
-                                if (area.pos.x === 11994 && area.pos.y === 885){
-                                    mm120Reached = true;
-                                    mm120Time = players[0].timer - startTime //TODO: mm120 - update UI
+                            if (skipVictory){
+                                endTime = players[0].timer;
+                                elapsedTime = endTime - startTime;
+                                timerEnd = true
 
-                                    let data = SetData(players[0], "Monumental Migration 120")
+                                if (true){ //TODO: Cheat - !players[0].hasCheated
+                                    let mapName = area.name
+
+                                    if (mapName === "Peculiar Pyramid"){
+                                        if(area.pos.x === 380 && area.pos.y === 384){
+                                            mapName = "Peculiar Pyramid Perimeter"
+                                        }
+                                        else{
+                                            mapName = "Peculiar Pyramid Inner"
+                                        }
+                                    }
+                                    else if (mapName === "Monumental Migration"){
+                                        if (area.pos.x === 11994 && area.pos.y === 885){
+                                            mapName = "Monumental Migration 120"
+                                        }
+                                        else{
+                                            mapName = "Monumental Migration 480"
+                                        }
+                                    }
+                                    else if (mapName === "Magnetic Monopole"){
+                                        if (area.pos.x === 731 && area.pos.y === 3352.5){
+                                            mapName = "Magnetic Monopole"
+                                        }
+                                        else{
+                                            mapName = "Magnetic Monopole Dipole"
+                                        }
+                                    }
+
+                                    let data = SetData(players[0], mapName)
                                     SendPlayerData(data.player, data.map)
+                                    console.log("Data not sent")
                                 }
-                            }
-                            else if (area.name == "Wacky Wonderland"){
-                                if (area.pos.x === 7760 && area.pos.y === 525){
-                                    skippedOnce = true
+                                else{
+                                    console.log("Data not saved")
                                 }
+
+                                break
                             }
-                            else if (area.name == "Humongous Hollow"){
-                                if (area.pos.x === 8000 && area.pos.y === 660){
-                                    skippedOnce = true
+                            else{
+                                if (area.name == "Monumental Migration" && !mm120Reached){
+                                    if (area.pos.x === 11994 && area.pos.y === 885){
+                                        mm120Reached = true;
+                                        mm120Time = players[0].timer - startTime //TODO: mm120 - update UI
+
+                                        let data = SetData(players[0], "Monumental Migration 120")
+                                        SendPlayerData(data.player, data.map)
+                                    }
                                 }
-                            }
-                            else if (area.name == "Elite Expanse"){
-                                if (area.pos.x === 7997 && area.pos.y === 705){
-                                    skippedOnce = true
+                                else if (area.name == "Wacky Wonderland"){
+                                    if (area.pos.x === 7760 && area.pos.y === 525){
+                                        skippedOnce = true
+                                    }
                                 }
-                            }
-                            else if (area.name == "Dangerous District"){
-                                if (area.pos.x === 8000 && area.pos.y === 795){
-                                    skippedOnce = true
+                                else if (area.name == "Humongous Hollow"){
+                                    if (area.pos.x === 8000 && area.pos.y === 660){
+                                        skippedOnce = true
+                                    }
+                                }
+                                else if (area.name == "Elite Expanse"){
+                                    if (area.pos.x === 7997 && area.pos.y === 705){
+                                        skippedOnce = true
+                                    }
+                                }
+                                else if (area.name == "Dangerous District"){
+                                    if (area.pos.x === 8000 && area.pos.y === 795){
+                                        skippedOnce = true
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
-        if (!check && !timerStart){
-            console.log(`${false} as ${info}`)
-        }
+            if (!check && !timerStart){
+                console.log(`${false} as ${info}`)
+            }
 
-    } catch (error) {
-        if (error instanceof TypeError && !typeErrorReceived){
-            console.error("Map not implemented for timer therefore TypeError");
-            typeErrorReceived = true
-        }
-        else{
-            throw error;
+        } catch (error) {
+            if (error instanceof TypeError && !typeErrorReceived){
+                console.error("Map not implemented for timer therefore TypeError");
+                typeErrorReceived = true
+            }
+            else{
+                throw error;
+            }
         }
     }
+
+   
 
     //Rendering
     var ligth = document.createElement('canvas');
