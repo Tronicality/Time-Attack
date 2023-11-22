@@ -5,6 +5,7 @@
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
 // @match        https://ravel-beta.sonicexe66.repl.co/
+// @require      https://code.jquery.com/jquery-3.6.4.min.js
 // @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/config.js
 // @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/html.js
 // @require      https://raw.githubusercontent.com/Tronicality/Time-Attack/main/script/Client%20Helper.js
@@ -17,6 +18,7 @@
 // ==/UserScript==
 
 /* Ideas
+ - Allow player to get more data than just the top 10 leaderboard info for example allTopPlayers (all collections)
  - Allow 1 area skip mode
  - Community hero ranking filter(everything, solo, duo, map, top 10 players)
 */
@@ -31,6 +33,8 @@
 //TODO: leaderboard
 //TODO: accounts
 //TODO: beg to either: Kaluub, sonicexe, ravel, DD1
+
+//TODO: leaderboard - if player not in top 10, still show their rank and time info
 
 window.renderArea = renderBr1hArea;
 

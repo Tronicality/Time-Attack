@@ -1,5 +1,3 @@
-// @require      https://code.jquery.com/jquery-3.6.4.min.js
-
 $("#settings").after(`
 <div id="br1hPack">
     <div>Br1h's Pack Settings:</div>
