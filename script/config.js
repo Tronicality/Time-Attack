@@ -128,27 +128,6 @@ const worldBoundaries = {
         "bottom": 1453
     }
 };
-/*
-function convertDuration(totalMilliseconds) {
-    // Calculate minutes
-    const minutes = Math.floor(totalMilliseconds / (60 * 1000));
-
-    // Calculate remaining milliseconds
-    totalMilliseconds %= (60 * 1000);
-
-    // Calculate seconds
-    const seconds = Math.floor(totalMilliseconds / 1000);
-
-    // Round remaining milliseconds to whole numbers
-    const remainingMilliseconds = Math.round(totalMilliseconds % 1000);
-
-    return {
-        minutes: minutes,
-        seconds: seconds,
-        milliseconds: remainingMilliseconds
-    };
-}
-*/
 
 function convertDuration(totalMilliseconds) {
     // Calculate minutes
@@ -164,4 +143,4 @@ function convertDuration(totalMilliseconds) {
         seconds: seconds,
         milliseconds: remainingMilliseconds === 1000 ? '000' : remainingMilliseconds
     };
-}
+};
