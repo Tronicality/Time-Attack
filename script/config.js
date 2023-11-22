@@ -7,7 +7,6 @@ document.addEventListener("keydown", handleKey);
 
 //Toggle Options
 const originalRenderArea = window.renderArea; //Soon to be used for different options
-let previousArea;
 let timehidden = true;
 let toggleUI = true;
 let toggleMinimap = true;

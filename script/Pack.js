@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Br1h's Pack
-// @version      1.0.2
+// @version      1.0.3
 // @description  For evades sandbox, ability to hide card or minimap or time and submit to a leaderboard.
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
@@ -35,8 +35,8 @@
 
 //TODO: leaderboard - if player not in top 10, still show their rank and time info
 //TODO: update - bug where user has to make a new userscript for update to come, hopeing changing the version fixes this
-
 window.renderArea = renderBr1hArea;
+let previousArea = "";
 
 function handleKey(event) {
     if (event.key.toLowerCase() === "h") { //Toggle hero card
