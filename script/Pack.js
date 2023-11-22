@@ -16,14 +16,22 @@
 // @grant        none
 // ==/UserScript==
 
+/* Ideas
+ - Allow 1 area skip mode
+ - Community hero ranking filter(everything, solo, duo, map, top 10 players)
+*/
+
+
+//TODO: documentation
 //TODO: mm120
-//TODO: combine everything
 //TODO: Cheat
 //TODO: data
 //TODO: server
 //TODO: rendering
-//TODO: community hero ranking filter(everything, solo, duo, map, top 10 players)
+//TODO: leaderboard
+//TODO: accounts
 //TODO: beg to either: Kaluub, sonicexe, ravel, DD1
+
 window.renderArea = renderBr1hArea;
 
 function handleKey(event) {
@@ -32,10 +40,10 @@ function handleKey(event) {
     } else if (event.key.toLowerCase() === "m") {
         toggleMinimap = !toggleMinimap;
     } else if (event.key.toLowerCase() === "p") {
-        let readStart = convertDuration(startTime)
-        let readEnd = convertDuration(endTime)
-        let readElapsed = convertDuration(elapsedTime)
-        let mm120 = convertDuration(mm120Time)
+        const readStart = convertDuration(startTime)
+        const readEnd = convertDuration(endTime)
+        const readElapsed = convertDuration(elapsedTime)
+        const mm120 = convertDuration(mm120Time)
 
         timeContent.text(`Your time ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`);
         if (!inMenu){ //This right here is so finicky, it only works with fadeTo for god knows why
@@ -80,7 +88,7 @@ function SetData(player, area){ //TODO: mm120 - update data
     else{
         mapData = {
             username: player.name,
-            rank: 1,
+            rank: 99,
             runs: {
                 hero: player.className,
                 deaths: player.deathCounter,
@@ -97,7 +105,6 @@ function SetData(player, area){ //TODO: mm120 - update data
     }
 }
 
-var previousArea;
 function inPreviousArea(current){
     try{
         if (previousArea != current){
@@ -109,8 +116,6 @@ function inPreviousArea(current){
     }
     return true
 }
-
-
 
 //Re-written render Area
 function renderBr1hArea(area, players, focus, old) {
@@ -157,18 +162,16 @@ function renderBr1hArea(area, players, focus, old) {
          //Leaderboard Data
         $('#leaderboard').css('display', 'block');
         try {
-            if (!timerStart) {
-                if (!inPreviousArea(area.name) ) {
-                    
-                    GetTopPlayersForArea(area.name)
-                        .then(data => {
-                            updateLeaderboard(data);
-                        })
-                        .catch(error => {
-                            console.error("Leaderboard data error: ", error.message);
-                        });
+            //TODO: (fixed?) leaderboard - after victory/ending run doesn't doesn't update
+            if (!inPreviousArea(area.name) ) {
+                GetTopPlayersForArea(area.name)
+                    .then(data => {
+                        updateLeaderboard(data);
+                    })
+                    .catch(error => {
+                        console.error("Leaderboard data error: ", error.message);
+                    });
                 }
-            }
         } catch (error) {
             console.error("Error in getting data: ", error.message);
         }

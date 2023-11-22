@@ -1,3 +1,17 @@
+/*Uneeded for now
+const pingGlitchServer = async () => {
+  try {
+    const response = await fetch('https://evades-sandbox-server.glitch.me');
+    if (response.ok) {
+      console.log(`Ping successful at ${new Date().toLocaleString()}`);
+    } else {
+      console.error(`Error pinging the server: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
+};
+*/
 function GetTopPlayersForArea(areaName) {
   return fetch("https://evades-sandbox-server.glitch.me/topPlayers", {
     method: 'POST',

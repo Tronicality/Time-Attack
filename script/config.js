@@ -7,7 +7,7 @@ document.addEventListener("keydown", handleKey);
 
 //Toggle Options
 const originalRenderArea = window.renderArea; //Soon to be used for different options
-
+let previousArea;
 let timehidden = true;
 let toggleUI = true;
 let toggleMinimap = true;
@@ -128,7 +128,7 @@ const worldBoundaries = {
         "bottom": 1453
     }
 };
-
+/*
 function convertDuration(totalMilliseconds) {
     // Calculate minutes
     const minutes = Math.floor(totalMilliseconds / (60 * 1000));
@@ -146,5 +146,22 @@ function convertDuration(totalMilliseconds) {
         minutes: minutes,
         seconds: seconds,
         milliseconds: remainingMilliseconds
+    };
+}
+*/
+
+function convertDuration(totalMilliseconds) {
+    // Calculate minutes
+    const minutes = Math.floor(totalMilliseconds / (60 * 1000));
+
+    totalMilliseconds %= (60 * 1000);
+    const remainingMilliseconds = Math.round(totalMilliseconds % 1000);
+
+    const seconds = Math.floor(totalMilliseconds / 1000) + (remainingMilliseconds === 1000 ? 1 : 0);
+
+    return {
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: remainingMilliseconds === 1000 ? '000' : remainingMilliseconds
     };
 }
