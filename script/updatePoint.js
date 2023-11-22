@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Br1h's Pack
-// @version      1.0.1
+// @version      1.0.2
 // @description  For evades sandbox, ability to hide card or minimap or time and submit to a leaderboard.
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
@@ -23,7 +23,7 @@
  - Community hero ranking filter(everything, solo, duo, map, top 10 players)
 */
 
-//TODO: update 
+//TODO: update
 //TODO: documentation
 //TODO: Cheat
 //TODO: data
