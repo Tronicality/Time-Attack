@@ -62,7 +62,6 @@ function SendToPlayer(player){
 function SendToMap(mapName ,map){
     let data = {
         ...map,
-        bestTime: Number,
         collection: mapName
     }
 

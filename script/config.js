@@ -7,6 +7,8 @@ document.addEventListener("keydown", handleKey);
 
 //Toggle Options
 const originalRenderArea = window.renderArea; //Soon to be used for different options
+let previousArea;
+let showLeaderboard = true;
 let timehidden = true;
 let toggleUI = true;
 let toggleMinimap = true;
@@ -142,3 +144,47 @@ function convertDuration(totalMilliseconds) {
         milliseconds: remainingMilliseconds === 1000 ? '000' : remainingMilliseconds
     };
 };
+
+function SetData(player, area){
+    const playerData = {
+        name: player.name,
+        map: area
+    }
+
+    let mapData = {}
+    if (area === "Monumental Migration 120"){
+        mapData = {
+            username: player.name,
+            rank: 999,
+            runs: {
+                hero: player.className,
+                deaths: player.deathCounter,
+                fps: (window.sandbox.checked) ? 60 : 30,
+                time: mm120Time,
+                noPoints: window.no_points.checked
+            }
+        }
+    }
+    else{
+        mapData = {
+            username: player.name,
+            rank: 99,
+            runs: {
+                hero: player.className,
+                deaths: player.deathCounter,
+                fps: (window.sandbox.checked) ? 60 : 30,
+                time: elapsedTime,
+                noPoints: window.no_points.checked
+            }
+        }
+    }
+
+    return {
+        player: playerData,
+        map: mapData
+    }
+}
+
+function logIn(name, password){
+    alert("Does Jack Shit LMAOOOOOOOOO")
+}

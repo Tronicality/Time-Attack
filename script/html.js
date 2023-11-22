@@ -1,3 +1,45 @@
+//Updating current html
+$("#nick").before($('<label>',{
+    text: 'Name: ',
+    css: {
+        'color': 'white',
+        'margin-right': '26px'
+    }
+}));
+
+//Password
+
+$("#name").after($('<div>',{
+    id: 'passwordD',
+    css: {
+        'position': 'fixed',
+        'left': '10px',
+        'top': '110px',
+        'z-index': '20'
+    }
+}));
+
+$("#passwordD").append($('<label>',{
+    text: 'Password: ',
+    css: {'color': 'white'}
+}));
+
+$("#passwordD").append($('<input>',{
+    id: 'password',
+    type: 'password'
+}));
+
+$('#passwordD').append($('<button>',{
+    id: 'loginBtn',
+    text: 'Log In',
+    css: {
+        'position': 'fixed',
+        'top': '140px',
+        'left': '222px'
+    },
+    click: function () {logIn($('#nick').val(), $('#password').val())}
+}));
+
 //Pack Settings
 $("#settings").after(`
 <div id="br1hPack">
@@ -220,12 +262,17 @@ $('<p>', {
 }).appendTo(packDocContent);
 
 $('<p>', {
-    text: "H - Hide hero card",
+    text: "H - show/hide hero card",
     css: cssDoc
 }).appendTo(packDocContent);
 
 $('<p>',{
-    text: "M - Hide minimap",
+    text: "L - show/hide leaderboard",
+    css: cssDoc
+}).appendTo(packDocContent);
+
+$('<p>',{
+    text: "M - show/hide minimap",
     css: cssDoc
 }).appendTo(packDocContent);
 
@@ -312,12 +359,12 @@ timeOverlay.click(function(e) {
 
 
 function updateLeaderboard(data) {
-    var leaderboardContainer = $('#leaderboard');
+    let leaderboardContainer = $('#leaderboard');
 
     // Check if the leaderboard already exists
     if (leaderboardContainer.length === 0) {
         // If not, create the leaderboard
-        var leaderboardHtml = '<div id="leaderboard">';
+        let leaderboardHtml = '<div id="leaderboard">';
         leaderboardHtml += '<ul style="position: absolute; list-style: none; right: 0; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">';
 
         for (var i = 0; i < data.length; i++) {
@@ -349,25 +396,31 @@ function updateLeaderboard(data) {
         });
     } else {
         // If the leaderboard already exists, update its content
-        var leaderboardHtml = '<ul style="position: absolute; list-style: none; right: 0; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">'; // Adjusted opacity
-
-        for (var i = 0; i < data.length; i++) {
-            let readBestTime = convertDuration(data[i].bestTime);
-            const trimmedUsername = data[i].username.length > 15 ? data[i].username.substring(0, 12) + '...' : data[i].username;
-            const spaces = '&nbsp;'.repeat(Math.max(0, 17 - trimmedUsername.length));
-            let rankColor = 'white';
-            if (data[i].rank === 1) {
-                rankColor = 'gold';
-            } else if (data[i].rank === 2) {
-                rankColor = 'silver';
-            } else if (data[i].rank === 3) {
-                rankColor = '#cd7f32';
+        let leaderboardHtml = '<ul style="position: absolute; list-style: none; right: 0; padding: 0; margin: 0; background-color: rgba(0, 0, 0, 0.8);">'; // Adjusted opacity
+        if (data.length > 0){ //There is data to be displayed
+            for (var i = 0; i < data.length; i++) {
+                let readBestTime = convertDuration(data[i].bestTime);
+                const trimmedUsername = data[i].username.length > 15 ? data[i].username.substring(0, 12) + '...' : data[i].username;
+                const spaces = '&nbsp;'.repeat(Math.max(0, 17 - trimmedUsername.length));
+                let rankColor = 'white';
+                if (data[i].rank === 1) {
+                    rankColor = 'gold';
+                } else if (data[i].rank === 2) {
+                    rankColor = 'silver';
+                } else if (data[i].rank === 3) {
+                    rankColor = '#cd7f32';
+                }
+    
+                leaderboardHtml += `<li style="margin: 10px 0; padding: 0 10px; display: flex; justify-content: space-between; color: ${rankColor};">#${data[i].rank}. ${trimmedUsername}${spaces}<span>${readBestTime.minutes}:${readBestTime.seconds}.${readBestTime.milliseconds}</span></li>`;
             }
-
-            leaderboardHtml += `<li style="margin: 10px 0; padding: 0 10px; display: flex; justify-content: space-between; color: ${rankColor};">#${data[i].rank}. ${trimmedUsername}${spaces}<span>${readBestTime.minutes}:${readBestTime.seconds}.${readBestTime.milliseconds}</span></li>`;
+    
+            leaderboardHtml += '</ul>';
         }
-
-        leaderboardHtml += '</ul>';
+        else{
+            leaderboardHtml += '<li style="margin: 10px 0; padding: 0 10px; display: flex; justify-content: space-between;>No runs made on the map</li>'
+            leaderboardHtml += '</ul>';
+        }
+        
 
         // Update the content of the existing leaderboard
         leaderboardContainer.html(leaderboardHtml);

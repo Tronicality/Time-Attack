@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Br1h's Pack
-// @version      1.0.3
+// @version      1.0.4
 // @description  For evades sandbox, ability to hide card or minimap or time and submit to a leaderboard.
 // @author       Br1h
 // @match        https://ravel.turudu.repl.co/
@@ -20,23 +20,20 @@
 /* Ideas
  - Allow player to get more data than just the top 10 leaderboard info for example allTopPlayers (all collections)
  - Allow 1 area skip mode
- - Community hero ranking filter(everything, solo, duo, map, top 10 players)
+ - Community hero ranking including filtering(everything, solo, duo, map, 'pros')
 */
 
-//TODO: update
+
 //TODO: documentation
-//TODO: Cheat
 //TODO: data
 //TODO: server
 //TODO: rendering
 //TODO: leaderboard
-//TODO: accounts
+//TODO: accounts - self explanatory
 //TODO: beg to either: Kaluub, sonicexe, ravel, DD1
 
 //TODO: leaderboard - if player not in top 10, still show their rank and time info
-//TODO: update - bug where user has to make a new userscript for update to come, hopeing changing the version fixes this
 window.renderArea = renderBr1hArea;
-let previousArea = "";
 
 function handleKey(event) {
     if (event.key.toLowerCase() === "h") { //Toggle hero card
@@ -83,48 +80,18 @@ function handleKey(event) {
                 timehidden = true;
             }
         }
-    } else if(event.key.toLowerCase() === "o"){
+    } else if (event.key.toLowerCase() === "l"){ //Toggle leaderboard
+        showLeaderboard = !showLeaderboard
+
+        if (showLeaderboard){
+            $('#leaderboard').css('display', 'block')
+        }
+        else{
+            $('#leaderboard').css('display', 'none')
+        }
+
+    } else if(event.key.toLowerCase() === "o"){ //Reset run
         resetRun = true
-    }
-}
-
-function SetData(player, area){
-    const playerData = {
-        name: player.name,
-        map: area
-    }
-
-    let mapData = {}
-    if (area === "Monumental Migration 120"){
-        mapData = {
-            username: player.name,
-            rank: 999,
-            runs: {
-                hero: player.className,
-                deaths: player.deathCounter,
-                fps: (window.sandbox.checked) ? 60 : 30,
-                time: mm120Time,
-                noPoints: window.no_points.checked
-            }
-        }
-    }
-    else{
-        mapData = {
-            username: player.name,
-            rank: 99,
-            runs: {
-                hero: player.className,
-                deaths: player.deathCounter,
-                fps: (window.sandbox.checked) ? 60 : 30,
-                time: elapsedTime,
-                noPoints: window.no_points.checked
-            }
-        }
-    }
-
-    return {
-        player: playerData,
-        map: mapData
     }
 }
 
@@ -180,10 +147,14 @@ function renderBr1hArea(area, players, focus, old) {
 
     if (area.name in worldBoundaries){
          //Leaderboard Data
-        $('#leaderboard').css('display', 'block');
+
+         if (showLeaderboard){ // Going from invalid area -> valid area
+            $('#leaderboard').css('display', 'block');
+         }
         try {
             //TODO: (fixed?) leaderboard - after victory/ending run doesn't doesn't update
-            if (!inPreviousArea(area.name) ) {
+            if (!inPreviousArea(area.name) && showLeaderboard) {
+                
                 GetTopPlayersForArea(area.name)
                     .then(data => {
                         updateLeaderboard(data);
