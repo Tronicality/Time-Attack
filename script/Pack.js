@@ -23,9 +23,7 @@
  - Community hero ranking filter(everything, solo, duo, map, top 10 players)
 */
 
-
 //TODO: documentation
-//TODO: mm120
 //TODO: Cheat
 //TODO: data
 //TODO: server
@@ -35,21 +33,44 @@
 //TODO: beg to either: Kaluub, sonicexe, ravel, DD1
 
 //TODO: leaderboard - if player not in top 10, still show their rank and time info
-
 window.renderArea = renderBr1hArea;
 
 function handleKey(event) {
-    if (event.key.toLowerCase() === "h") {
+    if (event.key.toLowerCase() === "h") { //Toggle hero card
         toggleUI = !toggleUI;
-    } else if (event.key.toLowerCase() === "m") {
+    } else if (event.key.toLowerCase() === "m") {  //Toggle minimap
         toggleMinimap = !toggleMinimap;
-    } else if (event.key.toLowerCase() === "p") {
-        const readStart = convertDuration(startTime)
-        const readEnd = convertDuration(endTime)
-        const readElapsed = convertDuration(elapsedTime)
-        const mm120 = convertDuration(mm120Time)
+    } else if (event.key.toLowerCase() === "p") {  //Show user their time
+        if (!game.players[0].hasCheated){
+            const readElapsed = convertDuration(elapsedTime)
+            const mm120 = convertDuration(mm120Time)
 
-        timeContent.text(`Your time ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`);
+        
+            if (endTime){
+                timeContent.text(`Your time ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`);
+            }
+            else{
+                timeContent.text("Your time will be shown here once you finish a run")
+            }
+
+            if (game.players[0].world == 11){
+                mmTimeContent.css('display', 'block');
+                if (mm120Reached){
+                    mmTimeContent.text(`Your time to MM120: ${mm120.minutes}:${mm120.seconds}.${mm120.milliseconds}, your time to 480 is still ongoing`)
+                }
+                else{
+                    mmTimeContent.text("Once you finish MM120, your time will be shown here but your MM480 time will not stop")
+                }
+            }
+            else{
+                mmTimeContent.css('display', 'none')
+            }
+        }
+        else{
+            mmTimeContent.css('display', 'none')
+            timeContent.text("You have cheated, reload the page (f5) to be able to log runs again")
+        }
+        
         if (!inMenu){ //This right here is so finicky, it only works with fadeTo for god knows why
             if (timehidden) {
                 timeOverlay.fadeTo("fast", 1);  // Fade in
@@ -59,17 +80,12 @@ function handleKey(event) {
                 timehidden = true;
             }
         }
-
-        console.log(`Start: ${readStart.minutes}:${readStart.seconds}.${readStart.milliseconds}`)
-        console.log(`End: ${readEnd.minutes}:${readEnd.seconds}.${readEnd.milliseconds}`)
-        console.log(`Elapsed: ${readElapsed.minutes}:${readElapsed.seconds}.${readElapsed.milliseconds}`)
-        console.log(`mm120: ${mm120.minutes}:${mm120.seconds}.${mm120.milliseconds}`)
     } else if(event.key.toLowerCase() === "o"){
         resetRun = true
     }
 }
 
-function SetData(player, area){ //TODO: mm120 - update data
+function SetData(player, area){
     const playerData = {
         name: player.name,
         map: area
@@ -153,9 +169,6 @@ function renderBr1hArea(area, players, focus, old) {
 
         let areaY = (worldBoundaries[area.name].top + worldBoundaries[area.name].bottom)/2
         players[0].pos.y = areaY
-
-
-        console.log("Run Reset")
     }
 
     if (!(area.name in worldBoundaries)){
@@ -190,12 +203,11 @@ function renderBr1hArea(area, players, focus, old) {
                         if (players[0].area == 0){
                             if(players[0].pos.x < worldBoundaries[area.name].x){ //Validate if player is in area
                                 if (players[0].pos.y > worldBoundaries[area.name].top && players[0].pos.y < worldBoundaries[area.name].bottom){
-                                    if (!players[0].safeZone){
-                                        console.log(true)
+                                    if (!players[0].safeZone){ //TODO: UI - tell user run is valid
+                                        //console.log(true)
                                         startTime = players[0].timer;
                                         timerStart = true
                                     }
-                                    //console.log(players[0].vel)
                                     check = true
                                 }
                                 else{
@@ -282,12 +294,13 @@ function renderBr1hArea(area, players, focus, old) {
                                         }
                                     }
 
-                                    let data = SetData(players[0], mapName)
-                                    SendPlayerData(data.player, data.map)
-                                    console.log("Data not sent")
-                                }
-                                else{
-                                    console.log("Data not saved")
+                                    try{ 
+                                        let data = SetData(players[0], mapName)
+                                        SendPlayerData(data.player, data.map)
+
+                                    } catch(error){ //TODO: data - save data to local storage if server is offline
+                                        console.error('Error message: ', error)
+                                    }
                                 }
 
                                 break
@@ -296,7 +309,7 @@ function renderBr1hArea(area, players, focus, old) {
                                 if (area.name == "Monumental Migration" && !mm120Reached){
                                     if (area.pos.x === 11994 && area.pos.y === 885){
                                         mm120Reached = true;
-                                        mm120Time = players[0].timer - startTime //TODO: mm120 - update UI
+                                        mm120Time = players[0].timer - startTime
 
                                         let data = SetData(players[0], "Monumental Migration 120")
                                         SendPlayerData(data.player, data.map)
@@ -328,8 +341,8 @@ function renderBr1hArea(area, players, focus, old) {
                 }
             }
 
-            if (!check && !timerStart){
-                console.log(`${false} as ${info}`)
+            if (!check && !timerStart){ //todo UI - tell user why run is not valid
+                //console.log(`${false} as ${info}`)
             }
 
         } catch (error) {
@@ -343,7 +356,6 @@ function renderBr1hArea(area, players, focus, old) {
         }
     }
 
-   
 
     //Rendering
     var ligth = document.createElement('canvas');

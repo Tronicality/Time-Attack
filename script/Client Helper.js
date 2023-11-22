@@ -23,18 +23,18 @@ function GetTopPlayersForArea(areaName) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log('Get Response:', data);
-      return data; // Return the data
+      //console.log('Get Response:', data);
+      return data;
     })
     .catch(error => {
       console.error('Get Error:', error);
-      throw error; // Throw the error to be caught by the caller
+      throw error;
     });
 }
 
-function SendPlayerData(player, map){ //TODO: data - Actually send it over and save (in local storage) if cannot connect to api
-    console.log("Player Data: ", player)
-    console.log("Map Data: ",map)
+function SendPlayerData(player, map){
+    //console.log("Player Data: ", player)
+    //console.log("Map Data: ",map)
 
     SendToPlayer(player)
     SendToMap(player.map, map)
@@ -50,8 +50,9 @@ function SendToPlayer(player){
         body: JSON.stringify(player)
       })
         .then(response => response.json())
-        .then(data => {
-          console.log('POST Response:', data);
+        .then(data => { //TODO: UI - tell user that their general info has been updated
+          //console.log('POST Response:', data);
+          //return data;
         })
         .catch(error => {
           console.error('POST Error:', error);
@@ -74,8 +75,9 @@ function SendToMap(mapName ,map){
         body: JSON.stringify(data)
       })
         .then(response => response.json())
-        .then(data => {
-          console.log('POST Response:', data);
+        .then(data => { //TODO: UI - tell user that their run has been logged
+          //console.log('POST Response:', data);
+          //return data;
         })
         .catch(error => {
           console.error('POST Error:', error);

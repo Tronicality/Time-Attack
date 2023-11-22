@@ -1,3 +1,4 @@
+//Pack Settings
 $("#settings").after(`
 <div id="br1hPack">
     <div>Br1h's Pack Settings:</div>
@@ -12,29 +13,79 @@ $("#settings").after(`
 </div>
 `);
 
+//Documentation Overlay
 let packDocContent = $('<div>', {
     id: 'packDocContent',
+    css: {
+        'color': 'white',
+        'padding': '20px',
+    }
 });
 
 let packDocOverlay = $('<div>', {
     id: 'packDocOverlay',
     style: 'display:none; overflow: auto;',
+    css: {
+        'position': 'fixed',
+        'top': '0',
+        'left': '0',
+        'width': '100%',
+        'height': '100%',
+        'background': 'rgba(0, 0, 0, 0.8)',
+        'justify-content': 'center',
+        'align-items': 'center',
+        'z-index' : '9999'
+    }
 });
 
 let packDocBtn = $('<button>', {
     id: 'packDocBtn',
     text: "Br1h's pack documentation",
+    css: {
+        'position': 'absolute',
+        'width': 'auto',
+        'height': 'auto',
+        'right': '0',
+        'bottom': '0',
+        'padding': '10px',
+        'margin': '10px',
+    },
     click: function() {packDocOverlay.fadeIn()}
 });
 
+//Time Overlay
 let timeContent = $('<div>', {
     id: 'timeContent',
-    text: `Your Time: ${elapsedTime}`
+    css: {
+        'background-color': '#fff',
+        'padding': '20px',
+        'border-radius': '5px'
+    }
 });
 
 let timeOverlay = $('<div>', {
-    id: 'timeOverlay'
+    id: 'timeOverlay',
+    css: {
+        'position': 'fixed',
+        'top': '0',
+        'left': '0',
+        'width': '100%',
+        'height': '100%',
+        'background': 'rgba(0, 0, 0, 0.8)',
+        'justify-content': 'center',
+        'align-items': 'center',
+        'z-index' : '9999'
+    }
 });
+
+let mmTimeContent = $('<div>',{
+    id: 'mmTimeContent',
+    css: {
+        'background-color': '#fff',
+        'padding': '20px',
+        'border-radius': '5px'
+    }
+}).appendTo(timeOverlay)
 
 //Preset CSS
 let cssTitle = {
@@ -60,7 +111,7 @@ let cssDocFinal = {
     'margin-bottom': '30px'
 };
 
-//Pack Documentation
+//Documentation Content
 $('<p>', {
     text: "Br1h's Pack Documentation",
     onclick: function() { $(timeOverlay).fadeOut(); },
@@ -104,7 +155,7 @@ $('<p>',{
 }).appendTo(packDocContent);
 
 $('<p>',{
-    text: "PLEASE DON'T USE OTHER PEOPLES NAMES, USE YOUR OWN",
+    text: "PLEASE USE YOUR NAME AND ONLY YOUR NAME",
     css: {
         'height': 'fit-content',
         'width': 'fit-content',
@@ -153,6 +204,11 @@ $('<p>', {
 
 $('<p>', {
     text: "The timer (for your run) starts after you leave the first safe zone. Dying doesn't matter you can die as if its normal sandbox (note if you use hard or medium, even if you go back to the start your run will not reset)",
+    css: cssDoc
+}).appendTo(packDocContent);
+
+$('<p>', {
+    text: "The timer will not stop at 40 for any map (MM120 has a separate timer, but the main timer goes to MM480) except qq (as I will be going by the speedrun excel sheet)",
     css: cssDocFinal
 }).appendTo(packDocContent);
 
@@ -179,8 +235,8 @@ $('<p>',{
 }).appendTo(packDocContent);
 
 $('<p>',{
-    text: "P - Shows the time you got for your run (not mm120 timer yet)",
-    css: cssDocFinal
+    text: "P - Shows either the time you got for your run (MM120 timer included for when you are in MM) or if you have cheated",
+    css: cssDocFinal 
 }).appendTo(packDocContent);
 
 //Message to Devs
@@ -206,7 +262,7 @@ $('<p>', {
 }).appendTo(packDocContent);
 
 $('<p>', {
-    text: "pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls",
+    text: "Pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls pls",
     css: {
         'height': 'fit-content',
         'width': 'fit-content',
@@ -223,7 +279,7 @@ $('<p>', {
 
 $('<p>', {
     text: "Br1h",
-    css: cssDoc
+    css: cssDocFinal
 }).appendTo(packDocContent);
 
 //Appending 
@@ -326,52 +382,6 @@ const styles = `
     top: 50%;
     background-color: white;
     padding: 5px;
-}
-
-#packDocBtn {
-    position: absolute;
-    width: auto;
-    height: auto;
-    right: 0;
-    bottom: 0;
-    padding: 10px;
-    margin: 10px;
-}
-
-#packDocOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    justify-content: center;
-    align-items: center;
-    z-index : 9999;
-}
-
-#packDocContent {
-    color: white;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-#timeOverlay {
-     display: none;
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background: rgba(0, 0, 0, 0.8);
-     justify-content: center;
-     align-items: center;
-}
-
-#timeContent {
-     background-color: #fff;
-     padding: 20px;
-     border-radius: 5px;
 }
 `;
 

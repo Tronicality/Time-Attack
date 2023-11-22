@@ -130,7 +130,6 @@ const worldBoundaries = {
 };
 
 function convertDuration(totalMilliseconds) {
-    // Calculate minutes
     const minutes = Math.floor(totalMilliseconds / (60 * 1000));
 
     totalMilliseconds %= (60 * 1000);
